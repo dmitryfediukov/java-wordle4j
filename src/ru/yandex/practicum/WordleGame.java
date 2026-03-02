@@ -22,7 +22,6 @@ public class WordleGame {
     private final WordleDictionary dictionary;
     private PrintWriter log;
     private final List<Attempt> history = new ArrayList<>();
-    private final Set<String> suggestedAlready = new HashSet<>();
     private final Random random = new Random();
 
     public WordleGame(WordleDictionary dictionary, PrintWriter log) {
@@ -37,7 +36,7 @@ public class WordleGame {
         if (isGameOver()) {
             throw new IllegalStateException("Игра уже завершена.");
         }
-        if (guess == null || guess.length() != 5) {
+        if (guess == null || guess.length() != GameSettings.WORD_LENGTH) {
             throw new IllegalArgumentException("Попытка должна быть из 5 символов.");
         }
 
@@ -59,15 +58,16 @@ public class WordleGame {
     }
 
     public static String checkGuessWithAnswer(String guess, String answer) {
-        if (guess == null || answer == null || guess.length() != 5 || answer.length() != 5) {
+        if (guess == null || answer == null || guess.length() != GameSettings.WORD_LENGTH ||
+                answer.length() != GameSettings.WORD_LENGTH) {
             throw new IllegalArgumentException("Попытка/Ответ должны состоять из 5 символов.");
         }
 
-        char[] result = new char[5];
+        char[] result = new char[GameSettings.WORD_LENGTH];
         Map<Character, Integer> remaining = new HashMap<>();
 
         // 1 проход: фиксируем '+', считаем оставшиеся буквы ответа
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < GameSettings.WORD_LENGTH; i++) {
             char g = guess.charAt(i);
             char a = answer.charAt(i);
 
@@ -79,7 +79,7 @@ public class WordleGame {
         }
 
         // 2 проход: для не '+' ставим '^' или '-'
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < GameSettings.WORD_LENGTH; i++) {
             if (result[i] == '+') {
                 continue;
             }

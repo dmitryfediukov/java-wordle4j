@@ -33,7 +33,7 @@ public class WordleDictionary {
     }
 
     public static boolean isValidWord(String word) {
-        if (word == null || word.length() != 5) {
+        if (word == null || word.length() != GameSettings.WORD_LENGTH) {
             return false;
         }
         for (int i = 0; i < word.length(); i++) {
